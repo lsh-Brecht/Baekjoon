@@ -24,50 +24,28 @@ private:
 		segTree[node] = (segTree[node * 2] + segTree[node * 2 + 1] )% mod;
 	}
 
-	void updateTreeAdd(int node, int start, int end, int left, int right, int val) {
+	void updateTree(int node, int start, int end, int left, int right, int val, int op) {
 		propagate(node, start, end);
 		if (right < start || end < left) return;
 		if (left <= start && end <= right) {
-			lazyTree[node].second = (lazyTree[node].second + val) % mod;
-			propagate(node, start, end);
-			return;
-		}
-		int mid = (start + end) / 2;
-		updateTreeAdd(node * 2, start, mid, left, right, val);
-		updateTreeAdd(node * 2 + 1, mid + 1, end, left, right, val);
-		segTree[node] = (segTree[node * 2] + segTree[node * 2 + 1]) % mod;
-	}
-
-	void updateTreeMultiply(int node, int start, int end, int left, int right, int val) {
-		propagate(node, start, end);
-		if (right < start || end < left) return;
-		if (left <= start && end <= right) {
-			lazyTree[node].first = (lazyTree[node].first * val) % mod;
-			lazyTree[node].second = (lazyTree[node].second * val) % mod;
-			propagate(node, start, end);
-			return;
-		}
-		int mid = (start + end) / 2;
-		updateTreeMultiply(node * 2, start, mid, left, right, val);
-		updateTreeMultiply(node * 2 + 1, mid + 1, end, left, right, val);
-		segTree[node] = (segTree[node * 2] + segTree[node * 2 + 1]) % mod;
-	}
-
-	void updateTreeAssign(int node, int start, int end, int left, int right, int val) {
-		propagate(node, start, end);
-		if (right < start || end < left) return;
-		if (left <= start && end <= right) {
-			segTree[node] = (ll)(end - start + 1) * val % mod;
-			if (start != end) {
+			if (op == 1) {
+				lazyTree[node].second = (lazyTree[node].second + val) % mod;
+			}
+			else if (op == 2) {
+				lazyTree[node].first = (lazyTree[node].first * val) % mod;
+				lazyTree[node].second = (lazyTree[node].second * val) % mod;
+			}
+			else if (op == 3) {
 				lazyTree[node].first = 0;
 				lazyTree[node].second = val;
 			}
+			propagate(node, start, end);
 			return;
 		}
 		int mid = (start + end) / 2;
-		updateTreeAssign(node * 2, start, mid, left, right, val);
-		updateTreeAssign(node * 2 + 1, mid + 1, end, left, right, val);
-		segTree[node] = (segTree[node * 2] + segTree[node * 2 + 1]) %mod;
+		updateTree(node * 2, start, mid, left, right, val, op);
+		updateTree(node * 2 + 1, mid + 1, end, left, right, val, op);
+		segTree[node] = (segTree[node * 2] + segTree[node * 2 + 1]) % mod;
 	}
 
 	void propagate(int node, int start, int end) {
@@ -104,14 +82,8 @@ public:
 		build(data, 1, 0, _treeLastIdx);
 	}
 
-	void updateAdd(int node, int start, int end, int left, int right, int val) {
-		updateTreeAdd(node, start, end, left - 1, right - 1, val);
-	}
-	void updateMultiply(int node, int start, int end, int left, int right, int val) {
-		updateTreeMultiply(node, start, end, left - 1, right - 1, val);
-	}
-	void updateAssign(int node, int start, int end, int left, int right, int val) {
-		updateTreeAssign(node, start, end, left - 1, right - 1, val);
+	void update(int node, int start, int end, int left, int right, int val, int op) {
+		updateTree(node, start, end, left - 1, right - 1, val, op);
 	}
 	int query(int node, int start, int end, int left, int right) {
 		return queryTree(node, start, end, left-1, right - 1);
@@ -127,17 +99,9 @@ void solve() {
 	cin >> m;
 	while (m--) {
 		int cmd, left, right, val; cin >> cmd >> left >> right;
-		if (cmd == 1) {
+		if (cmd != 4) {
 			cin >> val;
-			segTree.updateAdd(1, 0, n - 1, left, right, val);
-		}
-		else if (cmd == 2) {
-			cin >> val;
-			segTree.updateMultiply(1, 0, n - 1, left, right, val);
-		}
-		else if (cmd == 3) {
-			cin >> val;
-			segTree.updateAssign(1, 0, n - 1, left, right, val);
+			segTree.update(1, 0, n - 1, left, right, val, cmd);
 		}
 		else {
 			cout << segTree.query(1, 0, n - 1, left, right) % mod << "\n";
