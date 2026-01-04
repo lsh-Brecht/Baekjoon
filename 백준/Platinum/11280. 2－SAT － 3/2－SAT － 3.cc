@@ -13,9 +13,6 @@ stack<int> s;
 int global_scc = 0;
 int v, e;
 
-bool comp(vector<int>& a, vector<int>& b) {
-    return a[0] < b[0];
-}
 void dfs(int u) {
     visited[u] = true;
     for (int v : adj[u]) {
@@ -31,9 +28,6 @@ void rev_dfs(int u, int sIdx) {
     }
 }
 
-int makePosi(int x) {
-    return x + v;
-}
 int notOper(int x) {
     if (x > v) return x - v;
     else return x + v;
@@ -47,8 +41,8 @@ void solve() {
 	sccArr.resize(v * 2 + 2);
 	for (int i = 0; i < e; ++i) {
 		int a, b; cin >> a >> b;
-		if (a < 0) a = makePosi(-a);
-		if (b < 0) b = makePosi(-b);
+        if (a < 0) a = -a + v;
+        if (b < 0) b = -b + v;
 
 		adj[notOper(a)].push_back(b);
         adj[notOper(b)].push_back(a);
@@ -75,7 +69,6 @@ void solve() {
         }
     }
     cout << 1;
-
 }
 
 int main() {
