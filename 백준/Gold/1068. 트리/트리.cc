@@ -1,21 +1,23 @@
 #include <iostream>
 #include <vector>
 #include <deque>
-using namespace std; //최대한 간단히 구현
+using namespace std;
 using ll = long long;
 
 vector<int> adj[50]; //0~49
 int deleteNode;
+int ans = 0;
 
-int dfs(int r){
+void dfs(int r){
+	if (r == deleteNode)	return;
 	int cnt = 0;
-	if (adj[r].empty())	return 1;
 	for (int child : adj[r]) {
-		if (deleteNode == child && adj[r].size() == 1) return 1;
-		if (deleteNode == child) continue;
-		cnt += dfs(child);
+		if (deleteNode != child) {
+			dfs(child);
+			cnt++;
+		}
 	}
-	return cnt;
+	if (cnt == 0) ans++;
 }
 void solve() {
 	int n; cin >> n;
@@ -30,8 +32,10 @@ void solve() {
 	cin >> deleteNode;
 	if (deleteNode == root)
 		cout << 0;
-	else
-		cout << dfs(root);
+	else {
+		dfs(root);
+		cout << ans;
+	}
 }
 
 int main() {
