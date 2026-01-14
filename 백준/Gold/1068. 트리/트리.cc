@@ -1,39 +1,41 @@
 #include <iostream>
 #include <vector>
-using namespace std;
-int N, K, cnt = 0;
-vector<int> arr[51];
-void dfs(int curr) {
-    if (curr == K) return;
-    int childCount = 0;
-    for (int child : arr[curr]) {
-        if (child != K) {
-            dfs(child);
-            childCount++;
-        }
-    }
-    if (childCount == 0) cnt++;
+#include <deque>
+using namespace std; //최대한 간단히 구현
+using ll = long long;
+
+vector<int> adj[50]; //0~49
+int deleteNode;
+
+int dfs(int r){
+	int cnt = 0;
+	if (adj[r].empty())	return 1;
+	for (int child : adj[r]) {
+		if (deleteNode == child && adj[r].size() == 1) return 1;
+		if (deleteNode == child) continue;
+		cnt += dfs(child);
+	}
+	return cnt;
+}
+void solve() {
+	int n; cin >> n;
+	int root = -1;
+	for (int i = 0; i < n; ++i) {
+		int parent; cin >> parent;
+		if (parent != -1)
+			adj[parent].push_back(i);
+		else
+			root = i;
+	}
+	cin >> deleteNode;
+	if (deleteNode == root)
+		cout << 0;
+	else
+		cout << dfs(root);
 }
 
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-
-    cin >> N;
-    int temp, root = 0;
-    for (int i = 0; i < N; i++) {
-        cin >> temp;
-        if (temp == -1) {
-            root = i;
-        } else
-            arr[temp].push_back(i); //temp에서 i를 갈 수 있다
-    }
-    cin >> K;
-    if (K == root) {
-        cout << 0 << "\n";
-    } else {
-        dfs(root);
-        cout << cnt << "\n";
-    }
-    return 0;
+	ios::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+	solve();
+	return 0;
 }
