@@ -2,13 +2,10 @@
 #include <vector>
 using namespace std;
 using ll = long long;
-vector<ll> boxes;
+ll boxes[200001];
 void solve() {
 	int n, s; cin >> n >> s;
-	boxes.resize(n);
-	for (int i = 0; i < n; ++i) {
-		cin>> boxes[i];
-	}
+	for (int i = 0; i < n; ++i) cin>> boxes[i];
 	ll sum = 0;
 	for (int i = n - 1; i > 0; --i) {
 		sum += boxes[i];
