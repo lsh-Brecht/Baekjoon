@@ -9,10 +9,11 @@ bool selected[21];
 int ans = 500000;
 
 void recur(int idx, int cnt) {
+    if (ans == 0) return;//0이 발견되었다면 싹 다 가지치기
     if (cnt == n / 2) {
         int t1 = 0, t2 = 0;
-        for (int i = 0; i < n; i++) {
-            for (int j = i + 1; j < n; j++) {
+        for (int i = 0; i < n; ++i) {
+            for (int j = i + 1; j < n; ++j) {
                 if (selected[i] && selected[j]) {
                     t1 += allComb[i][j] + allComb[j][i];
                 }
@@ -25,10 +26,12 @@ void recur(int idx, int cnt) {
         return;
     }
     if (idx == n) return;
-    selected[idx] = true;
-    recur(idx + 1, cnt + 1);
-    selected[idx] = false;
-    recur(idx + 1, cnt);
+    for (int i = idx; i < n; ++i) {
+        if (cnt == 0 && i > 0) return;
+        selected[i] = true;
+        recur(i + 1, cnt + 1);
+        selected[i] = false;
+    }
 }
 
 void solve() {
