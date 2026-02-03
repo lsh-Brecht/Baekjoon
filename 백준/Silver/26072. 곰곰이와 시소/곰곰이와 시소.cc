@@ -20,13 +20,13 @@ void solve()
     for (int i = 0; i < N; i++) cin >> w[i];
     double low = 0.0;
     double high = L;
-    for (int i = 0; i < 200; i++)
+    for (int i = 0; i < 50; ++i)
     {
         double mid = (low + high) / 2.0;
         double WL = 0.0;
         double WR = 0.0;
 
-        for (int j = 0; j < N; j++)
+        for (int j = 0; j < N; ++j)
         {
             if (x[j] < mid)
             {
