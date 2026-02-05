@@ -2,8 +2,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
-#include <stack>
-#include <map>
+#include <unordered_map>
 using namespace std;
 using ll = long long;
 
@@ -31,7 +30,8 @@ public:
 void solve()
 {
 	int n, m; cin >> n >> m;
-    map<string, int> freq;
+    unordered_map<string, int> freq;
+    //단순 카운팅이니 해시맵으로
     for (int i = 0; i < n; ++i)
     {
         string s;
@@ -43,6 +43,8 @@ void solve()
     }
 
     vector<Word> vWord;
+	vWord.reserve(freq.size());
+
     for (auto& [text, count] : freq)
     {
         int len = text.length();
