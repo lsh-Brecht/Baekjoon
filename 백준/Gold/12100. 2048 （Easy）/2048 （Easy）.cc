@@ -48,9 +48,10 @@ mat moving(mat m, int dir)
             }
         }
         vector<int> merged;
-        for (int i = 0; i < v.size(); ++i)
+		int vlen = v.size();
+        for (int i = 0; i < vlen; ++i)
         {
-            if (i + 1 < v.size() && v[i] == v[i + 1])
+            if (i + 1 < vlen && v[i] == v[i + 1])
             {
                 merged.push_back(v[i] * 2);
                 i++;
@@ -60,8 +61,8 @@ mat moving(mat m, int dir)
                 merged.push_back(v[i]);
             }
         }
-
-        for (int i = 0; i < merged.size(); ++i)
+		int mlen = merged.size();
+        for (int i = 0; i < mlen; ++i)
         {
             int r, c;
             if (dir == UP)
@@ -112,6 +113,7 @@ void solve()
 	while (!q.empty())
 	{
 		mat cur = q.front(); q.pop();
+        //이전걸 꺼내서 4방향으로 움직여보고 업데이트 후 다시 넣기
 		for (int i = 0; i < 4; ++i)
 		{
 			mat ret = moving(cur, i);
